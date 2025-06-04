@@ -1,14 +1,14 @@
 import {
-  Calendar,
   ChevronDown,
   ChevronUp,
+  DollarSign,
   Home,
   Inbox,
   Plus,
   Projector,
-  Search,
   Settings,
   User2,
+  Users,
 } from "lucide-react";
 import React from "react";
 import {
@@ -32,8 +32,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import {
@@ -48,7 +46,7 @@ import Image from "next/image";
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
@@ -57,14 +55,14 @@ const items = [
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Users",
+    url: "/users",
+    icon: Users,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "Payments",
+    url: "/payments",
+    icon: DollarSign,
   },
   {
     title: "Settings",

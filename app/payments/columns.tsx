@@ -2,27 +2,29 @@
 
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+
 import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
 
 export type Payment = {
   id: string;
   amount: number;
-  username: string;
-  email: string;
   status: "pending" | "processing" | "success" | "failed";
+  email: string;
+  username: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+interface ColumnProps {
+  currency: {
+    locale: string;
+    currency: string;
+  };
+}
+
+export const createColumns = ({
+  currency,
+}: ColumnProps): ColumnDef<Payment>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -40,28 +42,38 @@ export const columns: ColumnDef<Payment>[] = [
         checked={row.getIsSelected()}
       />
     ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
-    accessorKey: "username",
-    header: "User",
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    enableSorting: false,
+    enableHiding: false,
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+    accessorKey: "amount",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"));
+      const formatted = new Intl.NumberFormat(currency.locale, {
+        style: "currency",
+        currency: currency.currency,
+      }).format(amount);
+
+      return <div className="font-medium">{formatted}</div>;
     },
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => {
       const status = row.getValue("status");
       return (
@@ -80,44 +92,21 @@ export const columns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-PK", {
-        style: "currency",
-        currency: "PKR",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
+    accessorKey: "email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("email")}</div>,
+  },
+  {
+    accessorKey: "username",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Username" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("username")}</div>,
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
