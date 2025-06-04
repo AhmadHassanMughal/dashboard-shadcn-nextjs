@@ -20,25 +20,27 @@ import { Button } from "@/components/ui/button";
 import EditUser from "@/components/EditUser";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AppLineChart from "@/components/AppLineChart";
+import { AppBreadCrumb } from "@/components/AppBreadCrumb";
+
+const breadcrumbs = [
+  {
+    title: "Dashboard",
+    href: "/",
+  },
+  {
+    title: "Users",
+    href: "/users",
+  },
+  {
+    title: "User Details",
+    href: null,
+  },
+];
 
 const SingleUserPage = () => {
   return (
     <div>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/users">Users</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>John Doe</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <AppBreadCrumb data={breadcrumbs} />
       <div className="mt-4 flex flex-col xl:flex-row gap-8">
         {/* LEFT  */}
         <div className="w-full xl:w-1/3 space-y-6">
