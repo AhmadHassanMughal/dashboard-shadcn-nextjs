@@ -5,6 +5,7 @@ import {
   DollarSign,
   FileText,
   Home,
+  ListCheck,
   ListIcon,
   PersonStanding,
   Plus,
@@ -64,7 +65,7 @@ const menuItems = [
         subItems: [
           {
             type: "plain-menu-item",
-            icon: ListIcon,
+            icon: ListCheck,
             label: "Listing",
             href: "/users",
             visible: ["admin", "teacher", "student", "parent"],
